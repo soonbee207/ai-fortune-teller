@@ -1,10 +1,42 @@
+:root {
+    --bg-color: #f0f0f0;
+    --text-color: #333;
+    --number-bg: #fff;
+    --number-text: #333;
+    --btn-bg: #4CAF50;
+    --btn-hover: #45a049;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #fff;
+    --number-bg: #333;
+    --number-text: #fff;
+}
+
 body {
     font-family: sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px;
+    background: none;
+    border: 2px solid var(--text-color);
+    color: var(--text-color);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .container {
@@ -21,14 +53,14 @@ body {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #fff;
+    background-color: var(--number-bg);
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 5px;
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: var(--number-text);
 }
 
 #generate-btn {
@@ -36,12 +68,12 @@ body {
     font-size: 18px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
+    background-color: var(--btn-bg);
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 #generate-btn:hover {
-    background-color: #45a049;
+    background-color: var(--btn-hover);
 }
