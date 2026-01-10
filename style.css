@@ -20,30 +20,107 @@
     --number-text: #fff;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Navbar Styles */
+.navbar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    min-height: 100vh;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 15px 30px;
+    background-color: var(--container-bg);
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
+.nav-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--btn-bg);
+}
+
+/* Footer Styles */
+.footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background-color: var(--container-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 10px;
+    opacity: 0.7;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+}
+
+/* Content & Layout Adjustments */
+body {
+    /* Reset existing margin/padding from replace if needed, mostly handled by defaults */
+    display: block; /* Changed from flex center to allow proper document flow with navbar/footer */
+}
+
+.container {
+    margin: 0 auto; /* Center the container */
+    /* existing styles... */
+}
+
+.text-content {
+    text-align: left;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgba(0,0,0,0.02);
+    border-radius: 10px;
+    line-height: 1.6;
+}
+
+.text-content h2 {
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: var(--btn-bg);
+}
+
+.text-content p {
+    margin-bottom: 15px;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+/* Position toggle in navbar instead of absolute */
 .theme-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px;
-    background: transparent;
+    position: static;
     border: none;
-    font-size: 24px;
-    cursor: pointer;
-    transition: transform 0.2s;
+    background: none;
+    padding: 5px;
+    margin-left: 10px;
 }
 
 .theme-toggle:hover {

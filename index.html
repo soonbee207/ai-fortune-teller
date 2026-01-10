@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인공지능 동물상 테스트</title>
+    <meta name="description" content="AI가 분석해주는 나의 동물상 테스트! 강아지상일까 고양이상일까? 사진 한 장으로 3초 만에 확인해보세요. 별도의 회원가입 없이 무료로 이용 가능합니다.">
+    <meta name="keywords" content="동물상 테스트, 강아지상, 고양이상, AI 관상, 인공지능 테스트, 무료 운세">
+    <meta property="og:title" content="인공지능 동물상 테스트 🐶🐱">
+    <meta property="og:description" content="나는 어떤 동물과 닮았을까? AI가 알려주는 정확한 동물상 분석!">
+    <title>인공지능 동물상 테스트 - 강아지상 vs 고양이상</title>
     <link rel="stylesheet" href="style.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5272452795652574"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5272452795652574" crossorigin="anonymous"></script>
 </head>
 <body>
-    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <nav class="navbar">
+        <div class="nav-brand">AI Tools</div>
+        <div class="nav-links">
+            <a href="index.html" style="color: var(--btn-bg); font-weight: bold;">동물상 테스트</a>
+            <a href="lotto.html">로또 번호 생성</a>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
+    </nav>
+
     <div class="container">
         <h1>인공지능 동물상 테스트 🐶🐱</h1>
         <p class="description">나는 강아지상일까 고양이상일까?<br>사진을 올려 확인해보세요! ✨</p>
@@ -34,6 +45,14 @@
             </div>
         </div>
 
+        <div class="text-content">
+            <h2>🐶 동물상 테스트란?</h2>
+            <p>구글의 Teachable Machine 2.0 인공지능 기술을 활용하여 만든 동물상 테스트입니다. 수만 장의 강아지, 고양이 사진을 학습한 AI가 당신의 사진을 분석하여 어떤 특징이 더 강한지 알려줍니다.</p>
+            
+            <h2>🔒 개인정보 안전 보장</h2>
+            <p>업로드하신 사진은 그 어디에도 저장되지 않습니다. 오직 여러분의 브라우저 내에서만 AI 분석 용도로 사용되므로 안심하고 이용하세요.</p>
+        </div>
+
         <div class="contact-section">
             <h3>🤝 제휴 문의</h3>
             <form action="https://formspree.io/f/meeejzno" method="POST" class="contact-form">
@@ -46,26 +65,23 @@
         <div id="disqus_thread" style="margin-top: 50px;"></div>
     </div>
 
+    <footer class="footer">
+        <p>© 2026 AI Tools. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="privacy.html">개인정보처리방침</a>
+        </div>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
     <script src="script.js"></script>
     <script>
-        /**
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-        /*
-        var disqus_config = function () {
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-        };
-        */
-        (function() { // DON'T EDIT BELOW THIS LINE
+        (function() {
         var d = document, s = d.createElement('script');
         s.src = 'https://product-builder.disqus.com/embed.js';
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
         })();
     </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </body>
 </html>
