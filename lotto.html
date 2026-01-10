@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오늘의 로또 번호</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button id="theme-toggle" class="theme-toggle">🌙</button>
+    <div class="container">
+        <h1>오늘의 로또 번호 🎰</h1>
+        <p class="description">행운이 살짝 다가오고 있어요 🍀<br>버튼을 눌러보세요 ✨</p>
+        <div class="numbers-container"></div>
+        <button id="generate-btn">번호 뽑기</button>
+        
+        <div class="contact-section">
+            <h3>🤝 제휴 문의</h3>
+            <form action="https://formspree.io/f/meeejzno" method="POST" class="contact-form">
+                <input type="email" name="email" placeholder="이메일 주소" required>
+                <textarea name="message" placeholder="문의 내용을 입력해주세요" required></textarea>
+                <button type="submit">문의 보내기</button>
+            </form>
+        </div>
+
+        <div id="disqus_thread" style="margin-top: 50px;"></div>
+        <script>
+            /**
+            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+            /*
+            var disqus_config = function () {
+            this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+            this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+            };
+            */
+            (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://product-builder.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+    <script src="lotto.js"></script>
+</body>
+</html>

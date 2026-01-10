@@ -230,6 +230,590 @@ h1 {
 
 .contact-form button:hover {
 
+
+
     opacity: 0.8;
 
+
+
 }
+
+
+
+
+
+
+
+/* Image Upload Styles */
+
+
+
+.file-upload-input {
+
+
+
+    position: absolute;
+
+
+
+    margin: 0;
+
+
+
+    padding: 0;
+
+
+
+    width: 100%;
+
+
+
+    height: 100%;
+
+
+
+    outline: none;
+
+
+
+    opacity: 0;
+
+
+
+    cursor: pointer;
+
+
+
+}
+
+
+
+
+
+
+
+.image-upload-wrap {
+
+
+
+    margin-top: 20px;
+
+
+
+    border: 4px dashed var(--number-bg);
+
+
+
+    position: relative;
+
+
+
+    border-radius: 10px;
+
+
+
+    transition: background-color 0.2s;
+
+
+
+}
+
+
+
+
+
+
+
+.image-dropping,
+
+
+
+.image-upload-wrap:hover {
+
+
+
+    background-color: var(--number-bg);
+
+
+
+    opacity: 0.6;
+
+
+
+}
+
+
+
+
+
+
+
+.drag-text {
+
+
+
+    text-align: center;
+
+
+
+    padding: 40px;
+
+
+
+}
+
+
+
+
+
+
+
+.drag-text h3 {
+
+
+
+    font-weight: 100;
+
+
+
+    color: var(--text-color);
+
+
+
+    margin: 0;
+
+
+
+}
+
+
+
+
+
+
+
+.file-upload-content {
+
+
+
+    display: none;
+
+
+
+    text-align: center;
+
+
+
+    margin-top: 20px;
+
+
+
+}
+
+
+
+
+
+
+
+.file-upload-image {
+
+
+
+    max-height: 200px;
+
+
+
+    max-width: 200px;
+
+
+
+    margin: auto;
+
+
+
+    padding: 10px;
+
+
+
+    border-radius: 10px;
+
+
+
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+
+
+}
+
+
+
+
+
+
+
+.remove-image {
+
+
+
+    width: 200px;
+
+
+
+    margin: 20px auto;
+
+
+
+    color: #fff;
+
+
+
+    background: #cd4535;
+
+
+
+    border: none;
+
+
+
+    padding: 10px;
+
+
+
+    border-radius: 4px;
+
+
+
+    cursor: pointer;
+
+
+
+    font-weight: bold;
+
+
+
+    transition: all 0.2s ease;
+
+
+
+    outline: none;
+
+
+
+}
+
+
+
+
+
+
+
+.remove-image:hover {
+
+
+
+    background: #c13b2a;
+
+
+
+    color: #ffffff;
+
+
+
+    transition: all 0.2s ease;
+
+
+
+    cursor: pointer;
+
+
+
+}
+
+
+
+
+
+
+
+.remove-image:active {
+
+
+
+    border: 0;
+
+
+
+    transition: all 0.2s ease;
+
+
+
+}
+
+
+
+
+
+
+
+/* Result Styles */
+
+
+
+.result-message {
+
+
+
+    font-size: 1.5rem;
+
+
+
+    font-weight: bold;
+
+
+
+    margin: 20px 0;
+
+
+
+    color: var(--text-color);
+
+
+
+}
+
+
+
+
+
+
+
+.bar-container {
+
+
+
+    display: flex;
+
+
+
+    align-items: center;
+
+
+
+    margin-bottom: 10px;
+
+
+
+    width: 100%;
+
+
+
+}
+
+
+
+
+
+
+
+.label-text {
+
+
+
+    width: 60px;
+
+
+
+    text-align: right;
+
+
+
+    margin-right: 10px;
+
+
+
+    font-weight: bold;
+
+
+
+}
+
+
+
+
+
+
+
+.bar-wrap {
+
+
+
+    flex-grow: 1;
+
+
+
+    background-color: var(--number-bg);
+
+
+
+    border-radius: 10px;
+
+
+
+    height: 20px;
+
+
+
+    overflow: hidden;
+
+
+
+    margin-right: 10px;
+
+
+
+}
+
+
+
+
+
+
+
+.bar {
+
+
+
+    height: 100%;
+
+
+
+    border-radius: 10px;
+
+
+
+    transition: width 0.5s ease;
+
+
+
+}
+
+
+
+
+
+
+
+.dog-bar { background-color: #f1c40f; }
+
+
+
+.cat-bar { background-color: #3498db; }
+
+
+
+
+
+
+
+.percent-text {
+
+
+
+    width: 40px;
+
+
+
+    text-align: left;
+
+
+
+    font-size: 0.9rem;
+
+
+
+}
+
+
+
+
+
+
+
+#loading {
+
+
+
+    display: none;
+
+
+
+    margin: 20px 0;
+
+
+
+}
+
+
+
+
+
+
+
+.spinner {
+
+
+
+    border: 4px solid rgba(0, 0, 0, 0.1);
+
+
+
+    width: 36px;
+
+
+
+    height: 36px;
+
+
+
+    border-radius: 50%;
+
+
+
+    border-left-color: var(--btn-bg);
+
+
+
+    animation: spin 1s ease infinite;
+
+
+
+    margin: 0 auto 10px;
+
+
+
+}
+
+
+
+
+
+
+
+@keyframes spin {
+
+
+
+    0% { transform: rotate(0deg); }
+
+
+
+    100% { transform: rotate(360deg); }
+
+
+
+}
+
+
+
+
