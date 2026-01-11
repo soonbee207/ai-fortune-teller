@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error("Saju Calculation Error:", err);
                     loadingDiv.innerHTML = `<p style="color:red">분석 중 오류가 발생했습니다.<br>${err.message}</p>`;
                 }
-            }
+            } 
         }, 1200); 
     });
 });
@@ -158,7 +158,7 @@ function calculatePillars(dateStr, timeStr) {
         },
         time: timeStr ? { 
             stem: CHEONGAN[timeStemIndex], branch: JIJI[timeBranchIndex],
-            elementStem: STEM_ELEMENTS[timeStemIndex], elementBranch: BRANCH_ELEMENTS[timeBranchIndex],
+            elementStem: STEM_ELEMENTS[timeStemIndex], elementBranch: BRANCH_ELEMENTS[timeStemIndex],
             stemIndex: timeStemIndex, branchIndex: timeBranchIndex
         } : null
     };
@@ -207,10 +207,17 @@ function displayResults(name, pillars, stats, gender) {
     
     document.getElementById('result-name').innerText = `${name}님의 명조(命造)`;
 
-    // 2. Render Charts
+    // 2. NEW: Key Destiny Quote
+    const quote = getDestinyQuote(pillars.day.elementStem, stats.dominant);
+    const quoteEl = document.getElementById('key-destiny-quote');
+    if (quoteEl) {
+        quoteEl.innerText = `“${quote}”`;
+    }
+
+    // 3. Render Charts
     renderCharts(stats);
 
-    // 3. Generate Detailed Interpretation
+    // 4. Generate Detailed Interpretation
     const interpretations = getInterpretations(pillars.day.elementStem, stats.dominant, stats.counts);
     
     document.getElementById('summary-text').innerHTML = interpretations.summary;
@@ -219,14 +226,14 @@ function displayResults(name, pillars, stats, gender) {
     document.getElementById('wealth-text').innerHTML = interpretations.wealth;
     document.getElementById('caution-text').innerHTML = interpretations.caution;
 
-    // 4. Compatibility
+    // 5. Compatibility
     const compat = getCompatibility(pillars.day.elementStem, stats.dominant);
     document.getElementById('good-element').innerText = compat.good.name;
     document.getElementById('good-reason').innerHTML = compat.good.reason;
     document.getElementById('bad-element').innerText = compat.bad.name;
     document.getElementById('bad-reason').innerHTML = compat.bad.reason;
 
-    // 5. Time-based & Lucky Items
+    // 6. Time-based & Lucky Items
     document.getElementById('today-luck').innerText = getDailyLuck(pillars.day.stemIndex);
     
     const yearlyContainer = document.getElementById('yearly-luck-container');
@@ -351,6 +358,24 @@ function getInterpretations(dayElement, dominant, counts) {
           dominant === 'metal' ? '금의 기운이 강하면 날카로운 언행으로 인덕(人德)을 잃을 수 있습니다. 칼은 칼집에 있을 때 더 위엄이 있는 법이니, 자신의 능력을 과시하기보다 겸손함을 미덕으로 삼으세요.' : 
           '토의 기운이 태과하면 게으름이나 무사안일주의에 빠질 수 있습니다. 현실에 안주하기보다 끊임없이 새로운 목표를 세우고 도전하는 자세가 귀하의 운을 트이게 합니다.'}`
     };
+}
+
+function getDestinyQuote(dayElement, dominant) {
+    const quotes = {
+        wood: "당신은 척박한 땅에서도 꽃을 피워내는 강인한 생명력을 타고났습니다.",
+        fire: "당신은 세상을 밝히는 등불처럼, 주변 사람들에게 영감을 주는 존재입니다.",
+        earth: "당신은 모든 것을 품어주는 대지처럼, 흔들리지 않는 중심을 가지고 있습니다.",
+        metal: "당신은 원석을 다듬어 보석이 되듯, 시련을 통해 더욱 빛나는 운명입니다.",
+        water: "당신은 거침없이 흐르는 강물처럼, 어떠한 장애물도 유연하게 넘어서는 지혜가 있습니다."
+    };
+    
+    let base = quotes[dayElement];
+    if (dayElement !== dominant) {
+        base += " (흐름을 타는 지혜)";
+    } else {
+        base += " (세상을 이끄는 힘)";
+    }
+    return base;
 }
 
 function getCompatibility(dayElem, dominant) {

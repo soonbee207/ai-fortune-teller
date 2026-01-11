@@ -86,6 +86,10 @@
         <div id="result" class="result hidden">
             <div class="card result-card">
                 <div class="seal-mark">鑑定서</div>
+                
+                <!-- NEW: Key Destiny Quote -->
+                <div id="key-destiny-quote" class="key-destiny-quote"></div>
+
                 <h2 id="result-name" class="result-title"></h2>
                 <p id="report-date" class="report-date"></p>
                 
@@ -201,9 +205,12 @@
             </div>
             
             <div class="methodology-section">
-                <h4>⚠️ 분석 인증 (Verification)</h4>
-                <p>본 결과는 고문헌에 기록된 만세력 알고리즘(절기 보정 포함)을 통해 산출되었습니다.<br>
-                사주는 통계학적 경향성을 보여주며, 개인의 노력에 따라 운명은 변화할 수 있습니다.</p>
+                <h4>📚 해석 기준 및 산출 방식 (Methodology)</h4>
+                <ul>
+                    <li>사주 원국은 고문헌에 기록된 <strong>만세력(萬歲曆)</strong> 기준 천간·지지 조합으로 정밀하게 계산됩니다.</li>
+                    <li>오행 분포는 각 주(年·月·日·時)의 기운을 가중 평균하여 산출된 데이터입니다.</li>
+                    <li>본 서비스는 명리학 이론을 기반으로 한 계산 결과를 구조적으로 해석합니다. 무작위 생성이 아닌, <strong>데이터 기반 분석</strong>입니다.</li>
+                </ul>
             </div>
 
             <button onclick="location.reload()" class="retry-btn">새로운 명조 분석하기</button>
