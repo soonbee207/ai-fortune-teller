@@ -437,6 +437,11 @@ function getLuckyData(seed) {
     };
 }
 
+function getWealthElement(dayElem) {
+    const map = { wood: '토(土)', fire: '금(金)', earth: '수(水)', metal: '목(木)', water: '화(火)' };
+    return map[dayElem];
+}
+
 function getWealthElementKey(dayElem) {
     const map = { wood: 'earth', fire: 'metal', earth: 'water', metal: 'wood', water: 'fire' };
     return map[dayElem];
