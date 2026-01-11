@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 관상 분석 - 운명 연구소</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">운명 연구소 🔮</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">사주 분석</a>
+            <a href="tarot.html" class="nav-item">신비한 타로</a>
+            <a href="face.html" class="nav-item active">AI 관상</a>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>👁️ AI 관상 (Physiognomy)</h1>
+            <p class="description">당신의 얼굴에 담긴 운명과 기질을<br>인공지능이 정밀하게 분석합니다.</p>
+        </header>
+
+        <div class="card form-card">
+            <div class="upload-area" id="upload-area">
+                <input type="file" id="image-upload" accept="image/*" hidden>
+                <div class="upload-content" id="upload-content">
+                    <div class="upload-icon">📷</div>
+                    <p class="upload-text">사진을 촬영하거나 업로드하세요</p>
+                    <p class="upload-sub">얼굴이 정면으로 나온 사진이 정확합니다</p>
+                </div>
+                <div class="preview-container hidden" id="preview-container">
+                    <img id="face-preview" src="" alt="Face Preview">
+                    <div class="scan-line" id="scan-line"></div>
+                </div>
+            </div>
+            <button id="analyze-btn" class="analyze-btn hidden">관상 분석하기</button>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p class="loading-text">얼굴의 이목구비(耳目口鼻)를 측정 중입니다...</p>
+        </div>
+
+        <div id="result" class="result hidden">
+            <div class="card result-card">
+                <div class="seal-mark">觀相</div>
+                <h2 class="result-title">분석 결과</h2>
+                
+                <div class="face-type-box">
+                    <span class="face-label">당신의 물형(物形)</span>
+                    <h3 id="animal-type" class="face-value">??상</h3>
+                    <p id="face-desc" class="face-desc"></p>
+                </div>
+
+                <div class="saju-grid" style="margin-top: 1.5rem;">
+                    <div class="saju-item">
+                        <span class="label">초년운</span>
+                        <span class="value" id="luck-early">??</span>
+                    </div>
+                    <div class="saju-item">
+                        <span class="label">중년운</span>
+                        <span class="value" id="luck-mid">??</span>
+                    </div>
+                    <div class="saju-item">
+                        <span class="label">말년운</span>
+                        <span class="value" id="luck-late">??</span>
+                    </div>
+                    <div class="saju-item">
+                        <span class="label">애정운</span>
+                        <span class="value" id="luck-love">??</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card analysis-card">
+                <h3>👥 닮은꼴 연예인</h3>
+                <p id="celebrity-lookalike" class="highlight-text" style="text-align: center; font-size: 1.2rem;"></p>
+            </div>
+
+            <div class="card analysis-card">
+                <h3>📜 상세 관상 풀이</h3>
+                <p id="detailed-analysis"></p>
+            </div>
+
+            <div class="methodology-section">
+                <h4>🤖 AI 분석 기준</h4>
+                <ul>
+                    <li>Teachable Machine 기반 이미지 분류 모델을 사용합니다.</li>
+                    <li>이목구비의 비율과 배치를 분석하여 동물상 관상법에 대입합니다.</li>
+                    <li>본 결과는 재미를 위한 것이며 절대적인 운명이 아닙니다.</li>
+                </ul>
+            </div>
+
+            <button onclick="location.reload()" class="retry-btn">다른 사진으로 다시 보기</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 운명 연구소. 재미로 보는 AI 관상입니다.</p>
+    </footer>
+
+    <!-- TensorFlow.js (Optional for future integration) -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="face.js"></script>
+    <script>
+        // Simple Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerText = savedTheme === 'light' ? '☀️' : '🌙';
+        }
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.innerText = newTheme === 'light' ? '☀️' : '🌙';
+        });
+    </script>
+</body>
+</html>
