@@ -235,6 +235,25 @@
 
             <button onclick="location.reload()" class="retry-btn">새로운 명조 분석하기</button>
         </div>
+
+        <!-- NEW: Disqus Comments -->
+        <div class="card comment-section">
+            <h3>💬 운명에 대해 이야기 나누기</h3>
+            <div id="disqus_thread"></div>
+            <script>
+                var disqus_config = function () {
+                    this.page.url = window.location.href;  
+                    this.page.identifier = "saju_main"; 
+                };
+                (function() { 
+                    var d = document, s = d.createElement('script');
+                    s.src = 'https://fortune-lab-1.disqus.com/embed.js'; // Replace with your shortname
+                    s.setAttribute('data-timestamp', +new Date());
+                    (d.head || d.body).appendChild(s);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        </div>
     </div>
 
     <footer class="footer">
