@@ -140,22 +140,24 @@
             <button onclick="location.reload()" class="retry-btn">다른 사진으로 다시 보기</button>
         </div>
 
-        <!-- NEW: Disqus Comments -->
+        <!-- Mock Comment Section -->
         <div class="card comment-section">
-            <h3>💬 관상 결과 나누기</h3>
-            <div id="disqus_thread"></div>
-            <script>
-                var disqus_config = function () {
-                    this.page.url = window.location.href;
-                    this.page.identifier = "face_main";
-                };
-                (function() {
-                    var d = document, s = d.createElement('script');
-                    s.src = 'https://fortune-lab-1.disqus.com/embed.js';
-                    s.setAttribute('data-timestamp', +new Date());
-                    (d.head || d.body).appendChild(s);
-                })();
-            </script>
+            <h3>💬 관상 커뮤니티</h3>
+            <div class="comment-list">
+                <div class="comment-item">
+                    <div class="comment-avatar">🦊</div>
+                    <div class="comment-content">
+                        <span class="comment-author">여우상</span>
+                        <p class="comment-text">삼정 균형이 좋다고 나왔네요 ㅎㅎ 신기해요!</p>
+                        <span class="comment-date">1시간 전</span>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-form">
+                <input type="text" placeholder="닉네임" class="comment-input-name">
+                <textarea placeholder="관상 결과를 공유해보세요..." class="comment-input-text"></textarea>
+                <button class="comment-submit-btn">댓글 등록</button>
+            </div>
         </div>
     </div>
 

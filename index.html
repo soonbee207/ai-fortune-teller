@@ -236,23 +236,32 @@
             <button onclick="location.reload()" class="retry-btn">새로운 명조 분석하기</button>
         </div>
 
-        <!-- NEW: Disqus Comments -->
+        <!-- Mock Comment Section (Replaces Disqus for Prototype) -->
         <div class="card comment-section">
-            <h3>💬 운명에 대해 이야기 나누기</h3>
-            <div id="disqus_thread"></div>
-            <script>
-                var disqus_config = function () {
-                    this.page.url = window.location.href;  
-                    this.page.identifier = "saju_main"; 
-                };
-                (function() { 
-                    var d = document, s = d.createElement('script');
-                    s.src = 'https://fortune-lab-1.disqus.com/embed.js'; // Replace with your shortname
-                    s.setAttribute('data-timestamp', +new Date());
-                    (d.head || d.body).appendChild(s);
-                })();
-            </script>
-            <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            <h3>💬 운명 커뮤니티 (Community)</h3>
+            <div class="comment-list">
+                <div class="comment-item">
+                    <div class="comment-avatar">🐲</div>
+                    <div class="comment-content">
+                        <span class="comment-author">갑진년 대박나자</span>
+                        <p class="comment-text">오행 분석이 정말 소름돋네요.. 제 성격이랑 딱 맞아요! 다들 힘내세요.</p>
+                        <span class="comment-date">방금 전</span>
+                    </div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-avatar">⭐</div>
+                    <div class="comment-content">
+                        <span class="comment-author">별을 쫓는 자</span>
+                        <p class="comment-text">올해 문서운이 있다고 했는데 진짜 자격증 합격했습니다 ㅠㅠ 감사합니다.</p>
+                        <span class="comment-date">10분 전</span>
+                    </div>
+                </div>
+            </div>
+            <div class="comment-form">
+                <input type="text" placeholder="닉네임" class="comment-input-name">
+                <textarea placeholder="운명에 대한 이야기를 나눠보세요..." class="comment-input-text"></textarea>
+                <button class="comment-submit-btn">댓글 등록</button>
+            </div>
         </div>
     </div>
 
