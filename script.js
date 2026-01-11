@@ -1,27 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme Toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+    // Theme Toggle removed or hidden based on request (Night Sky default), but keeping code safe.
     
-    // Check saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-        body.setAttribute('data-theme', savedTheme);
-        themeToggle.innerText = savedTheme === 'light' ? '☀️' : '🌙';
-    }
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        themeToggle.innerText = newTheme === 'light' ? '☀️' : '🌙';
-    });
-
     // Saju Logic
     const sajuForm = document.getElementById('saju-form');
     const loadingDiv = document.getElementById('loading');
     const resultDiv = document.getElementById('result');
+    const timeUnknownCheckbox = document.getElementById('time-unknown');
+    const timeInput = document.getElementById('birthtime');
+
+    // Handle Time Unknown Toggle
+    if (timeUnknownCheckbox) {
+        timeUnknownCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                timeInput.disabled = true;
+                timeInput.value = '';
+                timeInput.parentElement.style.opacity = '0.5';
+            } else {
+                timeInput.disabled = false;
+                timeInput.parentElement.style.opacity = '1';
+            }
+        });
+    }
 
     sajuForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -34,159 +33,266 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('name').value;
         const gender = document.querySelector('input[name="gender"]:checked').value;
         const birthdate = document.getElementById('birthdate').value;
-        const birthtime = document.getElementById('birthtime').value;
+        const isTimeUnknown = document.getElementById('time-unknown').checked;
+        const birthtime = isTimeUnknown ? null : document.getElementById('birthtime').value;
 
-        // Simulate processing time
-        setTimeout(() => {
-            const pillars = calculatePillars(birthdate, birthtime);
-            displayResults(name, pillars, gender, birthdate);
-            
-            loadingDiv.classList.add('hidden');
-            resultDiv.classList.remove('hidden');
-        }, 1500);
+        // Ritualistic Loading Sequence
+        const loadingSteps = [
+            "생년월일(生年月)의 기운을 하늘에 묻습니다...",
+            "음양(陰陽)의 조화를 살피고 있습니다...",
+            "오행(五行)의 흐름을 읽어내고 있습니다...",
+            "당신의 운명(運命)을 기록합니다..."
+        ];
+        
+        const loadingText = document.getElementById('loading-text');
+        let step = 0;
+        loadingText.innerText = loadingSteps[0];
+        
+        const interval = setInterval(() => {
+            step++;
+            if (step < loadingSteps.length) {
+                loadingText.innerText = loadingSteps[step];
+                loadingText.style.opacity = '0.5';
+                setTimeout(() => loadingText.style.opacity = '1', 200);
+            } else {
+                clearInterval(interval);
+                const pillars = calculatePillars(birthdate, birthtime);
+                const stats = calculateStats(pillars);
+                displayResults(name, pillars, stats, gender);
+                
+                loadingDiv.classList.add('hidden');
+                resultDiv.classList.remove('hidden');
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 1200); // Slower, more ritualistic pace
     });
 });
 
-// --- Saju Calculation Engine (Simplified for Prototype) ---
+// --- Saju Calculation Engine ---
 
 const CHEONGAN = ['갑(甲)', '을(乙)', '병(丙)', '정(丁)', '무(戊)', '기(己)', '경(庚)', '신(辛)', '임(壬)', '계(癸)'];
 const JIJI = ['자(子)', '축(丑)', '인(寅)', '묘(卯)', '진(辰)', '사(巳)', '오(午)', '미(未)', '신(申)', '유(酉)', '술(戌)', '해(亥)'];
+const ANIMAL_NAMES = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'];
 
-// Elements mapping: Wood, Fire, Earth, Metal, Water
+// Element Mappings
 const STEM_ELEMENTS = ['wood', 'wood', 'fire', 'fire', 'earth', 'earth', 'metal', 'metal', 'water', 'water'];
-// 0:Wood, 1:Fire, 2:Earth, 3:Metal, 4:Water
+const BRANCH_ELEMENTS = ['water', 'earth', 'wood', 'wood', 'earth', 'fire', 'fire', 'earth', 'metal', 'metal', 'earth', 'water'];
+const ELEMENT_NAMES_KO = { wood: '목(木)', fire: '화(火)', earth: '토(土)', metal: '금(金)', water: '수(水)' };
+const ELEMENT_COLORS = { wood: '#4caf50', fire: '#e53935', earth: '#a1887f', metal: '#bdbdbd', water: '#2196f3' };
 
 function calculatePillars(dateStr, timeStr) {
     const date = new Date(dateStr);
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    const day = date.getDate();
     
-    // 1. Year Pillar (Standard calculation)
-    // 1984 was year of Rat (Start of cycle for simplicity). 1984 % 10 = 4. 
-    // Sky: (Year - 4) % 10. if neg, +10.
+    // 1. Year Pillar
     let yearStemIndex = (year - 4) % 10;
     if (yearStemIndex < 0) yearStemIndex += 10;
-    
-    // Earth: (Year - 4) % 12.
     let yearBranchIndex = (year - 4) % 12;
     if (yearBranchIndex < 0) yearBranchIndex += 12;
 
-    // 2. Month Pillar (Simplified)
-    // Usually starts around 4-8th of solar month. 
-    // Branch roughly maps to month (Feb=Tiger, etc.). Simplified: Month 2 ~ Index 2 (Tiger)
-    let monthBranchIndex = (month + 1) % 12; // Dec(12) -> Ox(1), Jan(1) -> Tiger(2)... rough approx
-    
-    // Month Stem depends on Year Stem (Janggan method simplified)
-    // 甲/己 year -> 丙 month start
-    // 乙/庚 year -> 戊 month start
-    // ... simplified lookup
+    // 2. Month Pillar
+    let monthBranchIndex = (month + 1) % 12; 
     let monthStemStart = (yearStemIndex % 5) * 2 + 2; 
     let monthStemIndex = (monthStemStart + (month - 1)) % 10;
 
-    // 3. Day Pillar (Approximation using Julian Date reference)
-    // Reference: Jan 1, 1900 was Gab-Ja (0,0) ? No, actually calculating exact day pillar 
-    // requires a reference date. 
-    // Let's use a known anchor: Jan 1, 2000 was Saturday, Mwu-O (4, 6)
+    // 3. Day Pillar
     const refDate = new Date('2000-01-01');
     const diffTime = date.getTime() - refDate.getTime();
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    // Mwu (4) index start, O (6) index start
     let dayStemIndex = (4 + diffDays) % 10;
     if (dayStemIndex < 0) dayStemIndex += 10;
-    
     let dayBranchIndex = (6 + diffDays) % 12;
     if (dayBranchIndex < 0) dayBranchIndex += 12;
 
     // 4. Time Pillar
-    let timeBranchIndex = 0; // Default Rat time
+    let timeStemIndex = -1;
+    let timeBranchIndex = -1;
+    let timeElement = null;
+
     if (timeStr) {
         const hour = parseInt(timeStr.split(':')[0]);
-        // Time branches change every 2 hours, starting 23:30. Simplified:
-        // 23-01: Rat(0), 01-03: Ox(1)...
         timeBranchIndex = Math.floor(((hour + 1) % 24) / 2);
+        let timeStemStart = (dayStemIndex % 5) * 2;
+        timeStemIndex = (timeStemStart + timeBranchIndex) % 10;
+        timeElement = STEM_ELEMENTS[timeStemIndex]; // For stats
     }
-    
-    // Time Stem depends on Day Stem
-    // 甲/己 day -> 甲 time start
-    // 乙/庚 day -> 丙 time start
-    let timeStemStart = (dayStemIndex % 5) * 2;
-    let timeStemIndex = (timeStemStart + timeBranchIndex) % 10;
 
     return {
-        year: { stem: CHEONGAN[yearStemIndex], branch: JIJI[yearBranchIndex] },
-        month: { stem: CHEONGAN[monthStemIndex], branch: JIJI[monthBranchIndex] },
-        day: { stem: CHEONGAN[dayStemIndex], branch: JIJI[dayBranchIndex], element: STEM_ELEMENTS[dayStemIndex] },
-        time: { stem: CHEONGAN[timeStemIndex], branch: JIJI[timeBranchIndex] }
+        year: { 
+            stem: CHEONGAN[yearStemIndex], branch: JIJI[yearBranchIndex], 
+            elementStem: STEM_ELEMENTS[yearStemIndex], elementBranch: BRANCH_ELEMENTS[yearBranchIndex],
+            stemIndex: yearStemIndex, branchIndex: yearBranchIndex
+        },
+        month: { 
+            stem: CHEONGAN[monthStemIndex], branch: JIJI[monthBranchIndex],
+            elementStem: STEM_ELEMENTS[monthStemIndex], elementBranch: BRANCH_ELEMENTS[monthBranchIndex],
+            stemIndex: monthStemIndex, branchIndex: monthBranchIndex
+        },
+        day: { 
+            stem: CHEONGAN[dayStemIndex], branch: JIJI[dayBranchIndex], 
+            elementStem: STEM_ELEMENTS[dayStemIndex], elementBranch: BRANCH_ELEMENTS[dayBranchIndex],
+            stemIndex: dayStemIndex, branchIndex: dayBranchIndex
+        },
+        time: timeStr ? { 
+            stem: CHEONGAN[timeStemIndex], branch: JIJI[timeBranchIndex],
+            elementStem: STEM_ELEMENTS[timeStemIndex], elementBranch: BRANCH_ELEMENTS[timeBranchIndex],
+            stemIndex: timeStemIndex, branchIndex: timeBranchIndex
+        } : null
     };
 }
 
-function displayResults(name, pillars, gender, dateStr) {
-    // Set Pillars Text
-    document.getElementById('year-pillar').innerText = `${pillars.year.stem}\n${pillars.year.branch}`;
-    document.getElementById('month-pillar').innerText = `${pillars.month.stem}\n${pillars.month.branch}`;
-    document.getElementById('day-pillar').innerText = `${pillars.day.stem}\n${pillars.day.branch}`;
-    document.getElementById('time-pillar').innerText = `${pillars.time.stem}\n${pillars.time.branch}`;
-    
-    document.getElementById('result-name').innerText = `${name}님의 사주 분석 결과`;
+function calculateStats(pillars) {
+    const counts = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
+    const yinYang = { yin: 0, yang: 0 };
 
-    // Generate Interpretations based on Day Master (Day Stem Element)
-    const element = pillars.day.element;
-    const interpretations = getInterpretations(element);
-    
-    document.getElementById('personality-text').innerText = interpretations.personality;
-    document.getElementById('wealth-text').innerText = interpretations.wealth;
-    
-    // Yearly Luck (Next 3 years)
-    const currentYear = new Date().getFullYear();
-    const ul = document.getElementById('yearly-luck-list');
-    ul.innerHTML = '';
-    
-    for (let i = 0; i < 3; i++) {
-        const y = currentYear + i;
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${y}년:</strong> ${getYearlyLuck(element, y)}`;
-        ul.appendChild(li);
-    }
-}
+    // Helper to count
+    const processPillar = (p) => {
+        if (!p) return;
+        counts[p.elementStem]++;
+        counts[p.elementBranch]++;
+        
+        // Simple Yin/Yang: Even Index = Yang, Odd = Yin (roughly)
+        // Stems: 0(Gap)=Yang, 1(Eul)=Yin...
+        yinYang[p.stemIndex % 2 === 0 ? 'yang' : 'yin']++;
+        // Branches: 0(Ja)=Yang, 1(Chug)=Yin...
+        yinYang[p.branchIndex % 2 === 0 ? 'yang' : 'yin']++;
+    };
 
-function getInterpretations(element) {
-    const data = {
-        wood: {
-            personality: "당신은 큰 숲이나 화초처럼 성장하려는 욕구가 강합니다. 인자하고 부드러운 성품을 지녔으며, 창의적이고 기획력이 뛰어납니다. 굽히기보다는 뻗어나가려는 기질이 있어 자존심이 세지만, 리더십을 발휘하기도 좋습니다.",
-            wealth: "꾸준한 노력으로 재물을 모으는 타입입니다. 한탕주의보다는 자신의 전문성을 살려 차곡차곡 쌓아가는 것이 유리합니다. 교육, 기획, 창작 분야에서 재물을 얻을 기회가 많습니다."
-        },
-        fire: {
-            personality: "태양이나 촛불처럼 밝고 열정적입니다. 예의를 중시하며 명랑하고 쾌활한 성격으로 주변에 사람이 많습니다. 화끈하고 뒤끝이 없지만, 때로는 급한 성격으로 인해 실수를 할 수 있으니 차분함이 필요합니다.",
-            wealth: "활동적인 에너지가 강해 돈을 버는 능력도 탁월하지만, 쓰는 씀씀이도 큰 편입니다. 화려한 것을 좋아하며, 자신의 명예가 높아지면 자연스럽게 재물도 따라오는 형국입니다."
-        },
-        earth: {
-            personality: "넓은 대지나 높은 산처럼 믿음직스럽고 포용력이 있습니다. 신용을 최우선으로 여기며, 묵묵히 자신의 일을 해나가는 뚝심이 있습니다. 변화를 싫어하고 보수적인 면이 있으나, 한 번 마음먹은 일은 끝까지 해냅니다.",
-            wealth: "부동산이나 저축 등 안정적인 자산 증식에 유리합니다. 투기적인 것보다는 안전한 투자를 선호하며, 중개나 컨설팅 등 사람과 사람을 이어주는 일에서 이익을 얻기 쉽습니다."
-        },
-        metal: {
-            personality: "단단한 바위나 보석처럼 결단력이 있고 냉철합니다. 의리를 중요시하며 옳고 그름이 분명합니다. 카리스마가 있고 추진력이 좋지만, 때로는 너무 날카로운 말로 타인에게 상처를 줄 수 있으니 유연함이 필요합니다.",
-            wealth: "정확하고 치밀한 계산 능력을 바탕으로 재물을 운용합니다. 금융, 의료, 법조계 등 전문 직종에서 성공할 가능성이 높으며, 자신의 기술이나 권위를 통해 부를 축적합니다."
-        },
-        water: {
-            personality: "흐르는 물처럼 지혜롭고 유연합니다. 적응력이 뛰어나고 머리 회전이 빠릅니다. 속을 알 수 없는 신비로운 매력이 있으며, 사교적이지만 내면은 고독할 수 있습니다. 기획이나 아이디어로 승부하면 좋습니다.",
-            wealth: "물 흐르듯이 돈이 들어오고 나갑니다. 유통, 무역, 외식업 등 유동성이 큰 분야에서 두각을 나타낼 수 있습니다. 지적 자산을 활용한 재테크가 유리합니다."
+    processPillar(pillars.year);
+    processPillar(pillars.month);
+    processPillar(pillars.day);
+    processPillar(pillars.time);
+
+    // Find dominant element
+    let max = 0;
+    let dominant = 'wood'; // default
+    for (const [elm, count] of Object.entries(counts)) {
+        if (count > max) {
+            max = count;
+            dominant = elm;
         }
-    };
-    return data[element];
+    }
+
+    return { counts, yinYang, dominant };
 }
 
-function getYearlyLuck(element, year) {
-    // Simple mock logic for yearly luck based on year number and element
-    const lucks = [
-        "새로운 기회가 찾아오는 해입니다. 이동수가 있으니 변화를 두려워하지 마세요.",
-        "노력한 만큼의 결실을 맺는 시기입니다. 주변의 도움으로 일이 술술 풀립니다.",
-        "잠시 숨을 고르며 내실을 다져야 할 때입니다. 무리한 확장은 피하는 것이 좋습니다.",
-        "문서운이 들어와 계약이나 학업에 좋은 성과가 있습니다.",
-        "재물운이 상승하는 해입니다. 뜻밖의 수입이 생길 수 있으니 관리를 잘하세요."
-    ];
-    // Hash year + element to pick a random but consistent luck
-    const index = (year + element.charCodeAt(0)) % lucks.length;
-    return lucks[index];
+function displayResults(name, pillars, stats, gender) {
+    // 1. Fill Pillars
+    const setPillar = (id, p) => {
+        document.getElementById(id).innerText = p ? `${p.stem}${p.branch}` : '미정(未定)';
+    };
+    setPillar('year-pillar', pillars.year);
+    setPillar('month-pillar', pillars.month);
+    setPillar('day-pillar', pillars.day);
+    setPillar('time-pillar', pillars.time);
+    
+    document.getElementById('result-name').innerText = `${name}님의 명조(命造)`;
+
+    // 2. Render Charts
+    renderCharts(stats);
+
+    // 3. Generate Interpretative Text
+    const interpretations = getInterpretations(pillars.day.elementStem, stats.dominant, stats.counts);
+    
+    document.getElementById('summary-text').innerHTML = interpretations.summary;
+    document.getElementById('personality-text').innerHTML = interpretations.personality;
+    document.getElementById('love-text').innerHTML = interpretations.love;
+    document.getElementById('wealth-text').innerHTML = interpretations.wealth;
+    document.getElementById('caution-text').innerHTML = interpretations.caution;
+
+    // Add Date
+    const today = new Date();
+    document.getElementById('report-date').innerText = `작성일: ${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}`;
+}
+
+function renderCharts(stats) {
+    // Five Elements Bar Chart
+    const chartDiv = document.getElementById('five-elements-chart');
+    chartDiv.innerHTML = '';
+    const total = Object.values(stats.counts).reduce((a, b) => a + b, 0);
+    
+    ['wood', 'fire', 'earth', 'metal', 'water'].forEach(elm => {
+        const count = stats.counts[elm];
+        const percent = total > 0 ? (count / total) * 100 : 0;
+        
+        const group = document.createElement('div');
+        group.className = 'bar-group';
+        
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = `${Math.max(percent, 5)}%`; // Min height for visibility
+        bar.style.backgroundColor = ELEMENT_COLORS[elm];
+        
+        const label = document.createElement('div');
+        label.className = 'bar-label';
+        label.innerText = `${ELEMENT_NAMES_KO[elm]}\n(${count})`;
+        
+        group.appendChild(bar);
+        group.appendChild(label);
+        chartDiv.appendChild(group);
+    });
+
+    // Yin/Yang Bar
+    const totalYY = stats.yinYang.yin + stats.yinYang.yang;
+    const yinPct = totalYY > 0 ? (stats.yinYang.yin / totalYY) * 100 : 50;
+    const yangPct = totalYY > 0 ? (stats.yinYang.yang / totalYY) * 100 : 50;
+    
+    const yinBar = document.getElementById('yin-bar');
+    const yangBar = document.getElementById('yang-bar');
+    
+    yinBar.style.width = `${yinPct}%`;
+    yinBar.innerText = `음(陰) ${Math.round(yinPct)}%`;
+    yangBar.style.width = `${yangPct}%`;
+    yangBar.innerText = `양(陽) ${Math.round(yangPct)}%`;
+}
+
+function getInterpretations(dayElement, dominant, counts) {
+    // Logic: Interpret based on Day Master (Self) AND Dominant Element (Environment/Strength)
+    const selfName = ELEMENT_NAMES_KO[dayElement];
+    const domName = ELEMENT_NAMES_KO[dominant];
+    
+    // Dynamic text generation
+    let summary = `귀하는 <strong>${selfName}</strong>의 기운을 타고났으나, 사주 전체를 감싸는 기운은 <strong>${domName}</strong>입니다. `;
+    if (dayElement === dominant) {
+        summary += `본인의 기운이 매우 강하여(신강), 주관이 뚜렷하고 밀어붙이는 힘이 강력한 형국입니다.`;
+    } else {
+        summary += `주변 환경(${domName})이 본인(${selfName})과 어우러지며, 조화를 이루거나 혹은 다듬어지는 과정에 있습니다.`;
+    }
+
+    const personality = {
+        wood: "성장과 의욕이 넘치는 성향입니다. 뻗어나가려는 기질이 강해 시작은 잘하지만 마무리가 약할 수 있습니다.",
+        fire: "열정과 예의가 돋보입니다. 확산하는 기운이 강해 솔직하고 화려하나, 감정 기복이 있을 수 있습니다.",
+        earth: "믿음직하고 포용력이 있습니다. 변화보다는 안정을 추구하며, 한번 정한 것은 잘 바꾸지 않습니다.",
+        metal: "결단력과 맺고 끊음이 확실합니다. 냉철한 이성을 가졌으나 다소 날카로워 보일 수 있습니다.",
+        water: "지혜롭고 유연합니다. 상황 대처 능력이 뛰어나나, 속내를 알 수 없어 비밀스러워 보입니다."
+    };
+
+    const wealthLogic = `<strong>${selfName}</strong> 일간에게 재물은 <strong>${getWealthElement(dayElement)}</strong>의 기운입니다. 
+    ${counts[getWealthElementKey(dayElement)] > 0 
+        ? "사주 내에 재물의 기운이 자리잡고 있어, 흐름을 잘 타면 큰 부를 이룰 잠재력이 충분합니다." 
+        : "사주 원국에 재물의 기운이 약하게 드러나 있으나, 대운의 흐름이나 본인의 식상(활동)을 통해 재물을 만들어내는 자수성가형 구조입니다."}`;
+
+    return {
+        summary: summary,
+        personality: `귀하의 오행 분포를 보면 <strong>${domName}</strong>이 가장 강합니다. 이는 ${personality[dominant]}<br>하지만 본원인 ${selfName}의 특성도 함께 나타나, 때로는 이중적인 면모를 보일 수 있습니다.`,
+        love: `음양의 비율이 ${Math.abs(counts.wood - counts.metal) < 2 ? '균형 잡혀 있어' : '한쪽으로 쏠려 있어'} 감정의 흐름이 ${Math.abs(counts.wood - counts.metal) < 2 ? '안정적입니다' : '강렬합니다'}. 상대방에게 깊이 빠져드는 스타일이나, 본인의 강한 주관(${domName})으로 인해 주도권을 쥐려 할 수 있습니다.`,
+        wealth: wealthLogic,
+        caution: `가장 강한 기운인 <strong>${domName}</strong>이 과해질 때를 조심해야 합니다. 
+        ${dominant === 'fire' ? '성급한 판단이나 화를 내는 것을 경계하세요.' : 
+          dominant === 'water' ? '우울감이나 지나친 생각에 빠지는 것을 주의하세요.' : 
+          dominant === 'wood' ? '독단적인 결정으로 인한 고립을 피해야 합니다.' : 
+          dominant === 'metal' ? '차가운 말로 사람을 잃는 것을 조심하세요.' : 
+          '지나친 고집으로 기회를 놓치는 것을 경계하세요.'}`
+    };
+}
+
+function getWealthElement(dayElem) {
+    const map = { wood: '토(土)', fire: '금(金)', earth: '수(水)', metal: '목(木)', water: '화(火)' };
+    return map[dayElem];
+}
+
+function getWealthElementKey(dayElem) {
+    const map = { wood: 'earth', fire: 'metal', earth: 'water', metal: 'wood', water: 'fire' };
+    return map[dayElem];
 }
