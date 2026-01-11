@@ -50,6 +50,12 @@
         <div id="result" class="result hidden">
             <div class="card result-card">
                 <div class="seal-mark">觀相</div>
+                
+                <!-- NEW: Connection Quote -->
+                <div class="saju-face-link">
+                    <p>“사주가 타고난 기운의 구조라면,<br>관상은 그 기운이 현재 얼굴에 드러난 상태를 보여줍니다.”</p>
+                </div>
+
                 <h2 class="result-title">분석 결과</h2>
                 
                 <div class="face-type-box">
@@ -84,16 +90,54 @@
             </div>
 
             <div class="card analysis-card">
-                <h3>📜 상세 관상 풀이</h3>
-                <p id="detailed-analysis"></p>
+                <h3>🔍 부위별 정밀 분석</h3>
+                <p class="evidence-desc" style="text-align: center; margin-bottom: 1.5rem;">관상은 한 부위가 아닌 전체 균형으로 해석됩니다.</p>
+                
+                <div class="face-parts-list">
+                    <div class="face-part-item">
+                        <div class="part-icon">🧠</div>
+                        <div class="part-content">
+                            <strong>이마 (사고방식/초년운)</strong>
+                            <p id="part-forehead"></p>
+                        </div>
+                    </div>
+                    <div class="face-part-item">
+                        <div class="part-icon">👁️</div>
+                        <div class="part-content">
+                            <strong>눈 (감정/인간관계)</strong>
+                            <p id="part-eyes"></p>
+                        </div>
+                    </div>
+                    <div class="face-part-item">
+                        <div class="part-icon">👃</div>
+                        <div class="part-content">
+                            <strong>코 (재물/실행력)</strong>
+                            <p id="part-nose"></p>
+                        </div>
+                    </div>
+                    <div class="face-part-item">
+                        <div class="part-icon">👄</div>
+                        <div class="part-content">
+                            <strong>입 (언어/대인관계)</strong>
+                            <p id="part-mouth"></p>
+                        </div>
+                    </div>
+                    <div class="face-part-item">
+                        <div class="part-icon">🧔</div>
+                        <div class="part-content">
+                            <strong>턱 (말년운/지속력)</strong>
+                            <p id="part-chin"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="methodology-section">
-                <h4>🤖 AI 분석 기준</h4>
+                <h4>🤖 AI 분석 기준 및 유의사항</h4>
                 <ul>
                     <li>Teachable Machine 기반 이미지 분류 모델을 사용합니다.</li>
                     <li>이목구비의 비율과 배치를 분석하여 동물상 관상법에 대입합니다.</li>
-                    <li>본 결과는 재미를 위한 것이며 절대적인 운명이 아닙니다.</li>
+                    <li><strong>관상은 타고난 인상을 기반으로 한 기질과 경향성의 해석이며, 표정·생활 태도·선택에 따라 충분히 달라질 수 있습니다.</strong></li>
                 </ul>
             </div>
 

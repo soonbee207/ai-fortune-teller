@@ -39,8 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
         uploadArea.style.pointerEvents = 'none'; // Disable click
 
         // --- SIMULATION LOGIC START ---
-        // 실제 Teachable Machine 모델이 있다면 여기서 predict()를 호출합니다.
-        // 현재는 데모를 위해 랜덤 시뮬레이션을 수행합니다.
         
         await new Promise(r => setTimeout(r, 2000)); // 2초 대기 (분석 척)
 
@@ -56,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
             { type: "공룡상 (Dino)", desc: "개성 있고 강렬한 인상으로 시선을 사로잡는 상입니다.", celeb: "공유, 김우빈", luck: ["길", "대길", "대길", "평"] }
         ];
 
-        // Pick random result based on simple hash of image src length (pseudo-random)
+        // Pick random result based on simple hash of image src length
         const seed = facePreview.src.length; 
         const result = animals[seed % animals.length];
 
-        displayFaceResult(result);
+        displayFaceResult(result, seed);
         
         loadingDiv.classList.add('hidden');
         resultDiv.classList.remove('hidden');
@@ -69,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-function displayFaceResult(data) {
+function displayFaceResult(data, seed) {
     document.getElementById('animal-type').innerText = data.type;
     document.getElementById('face-desc').innerText = data.desc;
     document.getElementById('celebrity-lookalike').innerText = data.celeb;
@@ -79,36 +77,36 @@ function displayFaceResult(data) {
     document.getElementById('luck-late').innerText = data.luck[2];
     document.getElementById('luck-love').innerText = data.luck[3];
 
-    const details = [
-        "이마가 시원하여 초년운이 좋고 윗사람의 덕을 볼 수 있습니다.",
-        "눈매가 살아있어 재물을 모으는 능력이 탁월합니다.",
-        "코가 반듯하여 중년에 사업이나 일에서 큰 성과를 낼 관상입니다.",
-        "입꼬리가 올라가 있어 말년에도 웃을 일이 많고 자식 복이 있습니다.",
-        "전체적인 밸런스가 좋아 인복이 따르는 형국입니다."
+    // Detailed Parts Analysis
+    const foreheads = [
+        "넓고 시원하여 윗사람의 덕을 보고 초년운이 좋습니다.",
+        "M자형 이마로 창의적이고 예술적인 감각이 뛰어납니다.",
+        "반듯하고 도톰하여 지혜롭고 학업 성취가 높습니다."
     ];
-    // Randomly pick 2 details
-    const pick1 = details[Math.floor(Math.random() * details.length)];
-    let pick2 = details[Math.floor(Math.random() * details.length)];
-    while(pick1 === pick2) pick2 = details[Math.floor(Math.random() * details.length)];
+    const eyes = [
+        "눈동자가 흑백이 분명하여 총명하고 결단력이 있습니다.",
+        "눈꼬리가 살짝 올라가 도화살이 있으며 이성에게 인기가 많습니다.",
+        "선하고 맑은 눈빛으로 주변 사람들에게 신뢰를 줍니다."
+    ];
+    const noses = [
+        "콧대가 곧게 뻗어 의지가 강하고 실행력이 좋습니다.",
+        "코끝이 둥글고 도톰하여 재물복이 가득 차 있습니다.",
+        "매부리코 형상으로 한번 잡은 기회는 놓치지 않습니다."
+    ];
+    const mouths = [
+        "입꼬리가 올라가 있어 평생 식복이 따르고 긍정적입니다.",
+        "입술이 도톰하여 정이 많고 언변이 뛰어납니다.",
+        "단정한 입매로 신중하고 책임감이 강한 성격입니다."
+    ];
+    const chins = [
+        "턱이 둥글고 후덕하여 말년에 자식 복과 부귀를 누립니다.",
+        "브이라인으로 세련되었으며 자수성가할 관상입니다.",
+        "강인한 하관으로 리더십이 있고 추진력이 좋습니다."
+    ];
 
-    document.getElementById('detailed-analysis').innerHTML = `${pick1}<br>${pick2}`;
+    document.getElementById('part-forehead').innerText = foreheads[seed % foreheads.length];
+    document.getElementById('part-eyes').innerText = eyes[(seed + 1) % eyes.length];
+    document.getElementById('part-nose').innerText = noses[(seed + 2) % noses.length];
+    document.getElementById('part-mouth').innerText = mouths[(seed + 3) % mouths.length];
+    document.getElementById('part-chin').innerText = chins[(seed + 4) % chins.length];
 }
-
-/* 
-// --- Future Teachable Machine Integration Guide ---
-// 1. Train your model at https://teachablemachine.withgoogle.com/train/image
-// 2. Export the model (Upload) and get the URL (e.g., https://teachablemachine.withgoogle.com/models/...)
-// 3. Uncomment and use this function:
-
-async function predictWithTM() {
-    const URL = "YOUR_MODEL_URL_HERE";
-    const modelURL = URL + "model.json";
-    const metadataURL = URL + "metadata.json";
-
-    const model = await tmImage.load(modelURL, metadataURL);
-    const prediction = await model.predict(document.getElementById('face-preview'));
-    
-    // prediction array contains probabilities for each class
-    // Find the highest probability class and map it to our 'animals' data
-}
-*/

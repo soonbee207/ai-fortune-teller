@@ -342,20 +342,20 @@ input[type="radio"], input[type="checkbox"] {
     transform: rotate(-10deg);
 }
 
-.key-destiny-quote {
+.saju-face-link {
     text-align: center;
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin: 1.5rem 0 2rem;
+    margin: 1.5rem 0;
     padding: 1rem;
-    border-top: 1px solid rgba(255, 215, 0, 0.2);
-    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-    line-height: 1.5;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.saju-face-link p {
+    font-family: var(--font-serif);
     font-style: italic;
-    position: relative;
-    z-index: 1;
+    color: var(--accent);
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 .result-title {
@@ -942,4 +942,41 @@ input[type="radio"], input[type="checkbox"] {
 .face-desc {
     font-size: 1.1rem;
     line-height: 1.6;
+}
+
+/* Face Part Analysis */
+.face-parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.face-part-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border-left: 2px solid var(--secondary);
+}
+
+.part-icon {
+    font-size: 1.8rem;
+    min-width: 40px;
+    text-align: center;
+}
+
+.part-content strong {
+    display: block;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+    font-size: 1.05rem;
+}
+
+.part-content p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.5;
 }
