@@ -75,13 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => loadingText.style.opacity = '1', 200);
             } else {
                 clearInterval(interval);
-                const pillars = calculatePillars(birthdate, birthtime);
-                const stats = calculateStats(pillars);
-                displayResults(name, pillars, stats, gender);
-                
-                loadingDiv.classList.add('hidden');
-                resultDiv.classList.remove('hidden');
-                resultDiv.scrollIntoView({ behavior: 'smooth' });
+                try {
+                    const pillars = calculatePillars(birthdate, birthtime);
+                    const stats = calculateStats(pillars);
+                    displayResults(name, pillars, stats, gender);
+                    
+                    loadingDiv.classList.add('hidden');
+                    resultDiv.classList.remove('hidden');
+                    resultDiv.scrollIntoView({ behavior: 'smooth' });
+                } catch (err) {
+                    console.error("Saju Calculation Error:", err);
+                    loadingDiv.innerHTML = `<p style="color:red">분석 중 오류가 발생했습니다.<br>${err.message}</p>`;
+                }
             }
         }, 1200); 
     });
@@ -153,7 +158,7 @@ function calculatePillars(dateStr, timeStr) {
         },
         time: timeStr ? { 
             stem: CHEONGAN[timeStemIndex], branch: JIJI[timeBranchIndex],
-            elementStem: STEM_ELEMENTS[timeStemIndex], elementBranch: BRANCH_ELEMENTS[timeStemIndex],
+            elementStem: STEM_ELEMENTS[timeStemIndex], elementBranch: BRANCH_ELEMENTS[timeBranchIndex],
             stemIndex: timeStemIndex, branchIndex: timeBranchIndex
         } : null
     };
@@ -165,8 +170,8 @@ function calculateStats(pillars) {
 
     const processPillar = (p) => {
         if (!p) return;
-        counts[p.elementStem]++;
-        counts[p.elementBranch]++;
+        if (p.elementStem) counts[p.elementStem]++;
+        if (p.elementBranch) counts[p.elementBranch]++;
         
         yinYang[p.stemIndex % 2 === 0 ? 'yang' : 'yin']++;
         yinYang[p.branchIndex % 2 === 0 ? 'yang' : 'yin']++;
@@ -192,7 +197,8 @@ function calculateStats(pillars) {
 function displayResults(name, pillars, stats, gender) {
     // 1. Fill Pillars
     const setPillar = (id, p) => {
-        document.getElementById(id).innerText = p ? `${p.stem}${p.branch}` : '미정(未定)';
+        const el = document.getElementById(id);
+        if(el) el.innerText = p ? `${p.stem}${p.branch}` : '미정(未定)';
     };
     setPillar('year-pillar', pillars.year);
     setPillar('month-pillar', pillars.month);
@@ -213,7 +219,7 @@ function displayResults(name, pillars, stats, gender) {
     document.getElementById('wealth-text').innerHTML = interpretations.wealth;
     document.getElementById('caution-text').innerHTML = interpretations.caution;
 
-    // 4. Compatibility (New)
+    // 4. Compatibility
     const compat = getCompatibility(pillars.day.elementStem, stats.dominant);
     document.getElementById('good-element').innerText = compat.good.name;
     document.getElementById('good-reason').innerHTML = compat.good.reason;
@@ -224,16 +230,18 @@ function displayResults(name, pillars, stats, gender) {
     document.getElementById('today-luck').innerText = getDailyLuck(pillars.day.stemIndex);
     
     const yearlyContainer = document.getElementById('yearly-luck-container');
-    yearlyContainer.innerHTML = '';
-    [2024, 2025, 2026].forEach(year => {
-        const div = document.createElement('div');
-        div.className = 'year-card';
-        div.innerHTML = `
-            <span class="year-title">${year}년</span>
-            <p>${getYearlyLuck(pillars.day.elementStem, year)}</p>
-        `;
-        yearlyContainer.appendChild(div);
-    });
+    if (yearlyContainer) {
+        yearlyContainer.innerHTML = '';
+        [2024, 2025, 2026].forEach(year => {
+            const div = document.createElement('div');
+            div.className = 'year-card';
+            div.innerHTML = `
+                <span class="year-title">${year}년</span>
+                <p>${getYearlyLuck(pillars.day.elementStem, year)}</p>
+            `;
+            yearlyContainer.appendChild(div);
+        });
+    }
 
     const luckyData = getLuckyData(pillars.day.stemIndex);
     document.getElementById('lucky-numbers').innerText = luckyData.numbers;
@@ -245,8 +253,9 @@ function displayResults(name, pillars, stats, gender) {
 }
 
 function renderCharts(stats) {
-    // Five Elements
     const chartDiv = document.getElementById('five-elements-chart');
+    if (!chartDiv) return;
+    
     chartDiv.innerHTML = '';
     const total = Object.values(stats.counts).reduce((a, b) => a + b, 0);
     
@@ -271,7 +280,6 @@ function renderCharts(stats) {
         chartDiv.appendChild(group);
     });
 
-    // Yin/Yang
     const totalYY = stats.yinYang.yin + stats.yinYang.yang;
     const yinPct = totalYY > 0 ? (stats.yinYang.yin / totalYY) * 100 : 50;
     const yangPct = totalYY > 0 ? (stats.yinYang.yang / totalYY) * 100 : 50;
@@ -279,13 +287,17 @@ function renderCharts(stats) {
     const yinBar = document.getElementById('yin-bar');
     const yangBar = document.getElementById('yang-bar');
     
-    yinBar.style.width = `${yinPct}%`;
-    yinBar.innerText = `음(陰) ${Math.round(yinPct)}%`;
-    yangBar.style.width = `${yangPct}%`;
-    yangBar.innerText = `양(陽) ${Math.round(yangPct)}%`;
+    if (yinBar) {
+        yinBar.style.width = `${yinPct}%`;
+        yinBar.innerText = `음(陰) ${Math.round(yinPct)}%`;
+    }
+    if (yangBar) {
+        yangBar.style.width = `${yangPct}%`;
+        yangBar.innerText = `양(陽) ${Math.round(yangPct)}%`;
+    }
 
     let explanationDiv = document.getElementById('yin-yang-explanation');
-    if (!explanationDiv) {
+    if (!explanationDiv && document.querySelector('.yin-yang-bar')) {
         explanationDiv = document.createElement('p');
         explanationDiv.id = 'yin-yang-explanation';
         explanationDiv.className = 'evidence-desc';
@@ -293,7 +305,9 @@ function renderCharts(stats) {
         explanationDiv.style.fontSize = '0.8rem';
         document.querySelector('.yin-yang-bar').after(explanationDiv);
     }
-    explanationDiv.innerHTML = "<strong>* 음(陰):</strong> 차분함, 내실, 수용성, 안정 | <strong>* 양(陽):</strong> 활동성, 발산, 적극성, 변화<br>어느 한쪽이 좋고 나쁜 것이 아니며, 조화가 중요합니다.";
+    if (explanationDiv) {
+        explanationDiv.innerHTML = "<strong>* 음(陰):</strong> 차분함, 내실, 수용성, 안정 | <strong>* 양(陽):</strong> 활동성, 발산, 적극성, 변화<br>어느 한쪽이 좋고 나쁜 것이 아니며, 조화가 중요합니다.";
+    }
 }
 
 function getInterpretations(dayElement, dominant, counts) {
@@ -325,8 +339,8 @@ function getInterpretations(dayElement, dominant, counts) {
     return {
         summary: summary,
         personality: `귀하의 사주에서 가장 강력한 기운은 <strong>${domName}</strong>입니다.<br><br>${personalityText[dominant]}<br><br>이러한 기운이 본원인 <strong>${selfName}</strong>와 결합하여, 귀하는 남들과 다른 독창적인 시각과 문제 해결 능력을 갖추게 되었습니다. 때로는 내면의 갈등이 있을 수 있으나, 이는 더 큰 그릇으로 성장하기 위한 진통이니 긍정적으로 받아들이시길 바랍니다.`,
-        love: `음양의 조화를 살펴보면, 음(陰)과 양(陽)의 기운이 ${Math.abs(stats.yinYang.yin - stats.yinYang.yang) < 2 ? '황금비율을 이루고 있습니다' : '한쪽으로 다소 치우쳐져 있습니다'}.<br><br>
-        ${Math.abs(stats.yinYang.yin - stats.yinYang.yang) < 2 
+        love: `음양의 조화를 살펴보면, 음(陰)과 양(陽)의 기운이 ${Math.abs(counts.wood - counts.metal) < 2 ? '황금비율을 이루고 있습니다' : '한쪽으로 다소 치우쳐져 있습니다'}.<br><br>
+        ${Math.abs(counts.wood - counts.metal) < 2 
             ? "이는 감정의 기복이 적고 안정적인 연애를 선호함을 의미합니다. 상대방을 배려하고 이해하는 폭이 넓어 다툼이 적고, 오랜 기간 신뢰를 바탕으로 한 만남을 지속할 수 있습니다. 결혼 운 또한 순탄하며, 배우자와 친구 같은 동반자 관계를 형성할 가능성이 높습니다." 
             : "이는 사랑에 있어 매우 열정적이고 드라마틱한 성향을 보임을 의미합니다. 한 번 불타오르면 물불 가리지 않고 헌신하지만, 식을 때도 차갑게 돌아설 수 있습니다. 자신과 반대되는 성향의 이성에게 강한 끌림을 느끼며, 서로 부족한 부분을 채워주는 보완적인 관계가 이상적입니다."}`,
         wealth: wealthLogic,
