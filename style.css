@@ -23,7 +23,6 @@
 }
 
 [data-theme="light"] {
-    /* Keeping light theme as requested, but "Night Sky" is default/preferred for this vibe */
     --bg-color: #fdfbf7; 
     --bg-gradient: none;
     --card-bg: #ffffff;
@@ -81,6 +80,18 @@ h1, h2, h3, h4 {
     letter-spacing: 0.15em;
 }
 
+.theme-toggle {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: transform 0.3s;
+}
+.theme-toggle:hover {
+    transform: rotate(20deg);
+}
+
 .container {
     max-width: 680px;
     margin: 4rem auto;
@@ -131,6 +142,22 @@ h1, h2, h3, h4 {
 .card::before { top: 10px; left: 10px; border-right: none; border-bottom: none; }
 .card::after { bottom: 10px; right: 10px; border-left: none; border-top: none; }
 
+.card-header-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: var(--bg-color);
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
 .form-group {
     margin-bottom: 2.5rem;
 }
@@ -162,6 +189,12 @@ input[type="time"] {
 input:focus {
     outline: none;
     border-color: var(--primary);
+}
+
+[data-theme="light"] input[type="text"],
+[data-theme="light"] input[type="date"],
+[data-theme="light"] input[type="time"] {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
 .time-input-group {
@@ -304,6 +337,10 @@ input[type="radio"], input[type="checkbox"] {
     text-align: center;
 }
 
+[data-theme="light"] .saju-item {
+    background: #f8f8f8;
+}
+
 .saju-item .label {
     display: block;
     font-size: 0.7rem;
@@ -374,6 +411,7 @@ input[type="radio"], input[type="checkbox"] {
     margin-top: 0.5rem;
     font-size: 0.8rem;
     color: var(--text-muted);
+    text-align: center;
 }
 
 .yin-yang-bar {
@@ -432,6 +470,49 @@ input[type="radio"], input[type="checkbox"] {
     color: #e74c3c;
 }
 
+/* Compatibility Box */
+.compatibility-box {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.compat-item {
+    background: rgba(255,255,255,0.03);
+    padding: 1.5rem;
+    border-radius: 4px;
+}
+
+.compat-item.good {
+    border-left: 4px solid var(--wood);
+    background: rgba(76, 175, 80, 0.05);
+}
+
+.compat-item.bad {
+    border-left: 4px solid var(--fire);
+    background: rgba(229, 57, 53, 0.05);
+}
+
+.compat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.compat-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    font-family: var(--font-serif);
+}
+
+.compat-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
 .highlight-text {
     color: var(--accent);
     font-weight: 500;
@@ -477,6 +558,25 @@ input[type="radio"], input[type="checkbox"] {
     font-size: 1.2rem;
     color: var(--primary);
     font-family: var(--font-serif);
+}
+
+.methodology-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.footer {
+    margin-top: 4rem;
+    padding: 2rem;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    font-size: 0.9rem;
 }
 
 @keyframes fadeIn {
