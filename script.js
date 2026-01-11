@@ -207,15 +207,16 @@ function displayResults(name, pillars, stats, gender) {
     
     document.getElementById('result-name').innerText = `${name}님의 명조(命造)`;
 
-    // 2. NEW: Key Destiny Quote
+    // 2. Key Destiny Quote
     const quote = getDestinyQuote(pillars.day.elementStem, stats.dominant);
     const quoteEl = document.getElementById('key-destiny-quote');
     if (quoteEl) {
         quoteEl.innerText = `“${quote}”`;
     }
 
-    // 3. Render Charts
+    // 3. Render Charts (Bar & Radar)
     renderCharts(stats);
+    renderRadarChart(pillars.day.elementStem, stats.counts); // NEW Function
 
     // 4. Generate Detailed Interpretation
     const interpretations = getInterpretations(pillars.day.elementStem, stats.dominant, stats.counts);
@@ -257,6 +258,114 @@ function displayResults(name, pillars, stats, gender) {
     // Add Date
     const today = new Date();
     document.getElementById('report-date').innerText = `작성일: ${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}`;
+}
+
+// NEW: Radar Chart Logic
+function renderRadarChart(dayElement, counts) {
+    const svg = document.getElementById('radar-chart');
+    if (!svg) return;
+    svg.innerHTML = '';
+
+    // Calculate Scores based on 5 Elements logic (Simplified for visualization)
+    // Wealth: Element controlled by Day Master
+    // Love: Element controlling Day Master (Official) or Wealth
+    // Business: Output element (Expression)
+    // Health: Balance (too much or too little is bad)
+    // Study: Resource element
+    
+    const elements = ['wood', 'fire', 'earth', 'metal', 'water'];
+    const dayIdx = elements.indexOf(dayElement);
+    
+    // Cyclic Indices
+    const outputIdx = (dayIdx + 1) % 5;   // 식상 (Expression/Business)
+    const wealthIdx = (dayIdx + 2) % 5;   // 재성 (Wealth)
+    const officialIdx = (dayIdx + 3) % 5; // 관성 (Official/Love/Job)
+    const resourceIdx = (dayIdx + 4) % 5; // 인성 (Resource/Study)
+    
+    const getScore = (idx) => {
+        const count = counts[elements[idx]];
+        // Optimal count is 1-2. Too many (3+) or 0 reduces score slightly.
+        if (count === 1) return 80;
+        if (count === 2) return 95;
+        if (count === 3) return 70;
+        if (count > 3) return 60;
+        return 50; // Weak if 0, but potential exists in hidden stems (not calc here)
+    };
+
+    const scores = {
+        wealth: getScore(wealthIdx) + (Math.random() * 10), // Random variance for fun
+        love: getScore(officialIdx) + (Math.random() * 10),
+        business: getScore(outputIdx) + (Math.random() * 10),
+        study: getScore(resourceIdx) + (Math.random() * 10),
+        health: 100 - (Math.abs(counts[dayElement] - 2) * 15) // Balance of self
+    };
+
+    // Draw Radar Chart (Pentagon)
+    const stats = [
+        { label: '재물', value: scores.wealth },
+        { label: '연애', value: scores.love },
+        { label: '사업', value: scores.business },
+        { label: '건강', value: scores.health },
+        { label: '학업', value: scores.study }
+    ];
+
+    const centerX = 100;
+    const centerY = 100;
+    const radius = 70;
+    
+    // Draw Grid (Concentric Pentagons)
+    for (let i = 1; i <= 4; i++) {
+        let points = "";
+        for (let j = 0; j < 5; j++) {
+            const angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+            const r = (radius / 4) * i;
+            const x = centerX + r * Math.cos(angle);
+            const y = centerY + r * Math.sin(angle);
+            points += `${x},${y} `;
+        }
+        const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        polygon.setAttribute("points", points);
+        polygon.setAttribute("class", "radar-grid");
+        svg.appendChild(polygon);
+    }
+
+    // Draw Axis Lines
+    for (let j = 0; j < 5; j++) {
+        const angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+        const x2 = centerX + radius * Math.cos(angle);
+        const y2 = centerY + radius * Math.sin(angle);
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", centerX);
+        line.setAttribute("y1", centerY);
+        line.setAttribute("x2", x2);
+        line.setAttribute("y2", y2);
+        line.setAttribute("class", "radar-axis");
+        svg.appendChild(line);
+
+        // Labels
+        const labelX = centerX + (radius + 15) * Math.cos(angle);
+        const labelY = centerY + (radius + 15) * Math.sin(angle);
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", labelX);
+        text.setAttribute("y", labelY);
+        text.setAttribute("class", "radar-label");
+        text.textContent = stats[j].label;
+        svg.appendChild(text);
+    }
+
+    // Draw Data Area
+    let dataPoints = "";
+    for (let j = 0; j < 5; j++) {
+        const angle = (Math.PI * 2 * j) / 5 - Math.PI / 2;
+        const r = (radius * (stats[j].value / 100));
+        const x = centerX + r * Math.cos(angle);
+        const y = centerY + r * Math.sin(angle);
+        dataPoints += `${x},${y} `;
+    }
+    const dataPoly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    dataPoly.setAttribute("points", dataPoints);
+    dataPoly.setAttribute("class", "radar-area");
+    svg.appendChild(dataPoly);
 }
 
 function renderCharts(stats) {

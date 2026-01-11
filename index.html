@@ -16,6 +16,8 @@
     <nav class="navbar">
         <div class="nav-brand">운명 연구소 🔮</div>
         <div class="nav-links">
+            <a href="index.html" class="nav-item active">사주 분석</a>
+            <a href="tarot.html" class="nav-item">신비한 타로</a>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
     </nav>
@@ -130,6 +132,15 @@
                             <div id="yin-bar" class="yin-part">음 50%</div>
                             <div id="yang-bar" class="yang-part">양 50%</div>
                         </div>
+                    </div>
+                </div>
+                <!-- NEW: Total Luck Radar Chart -->
+                <div class="chart-container radar-section">
+                    <h4>💎 오행 종합 총운 (Total Destiny Score)</h4>
+                    <p class="evidence-desc">귀하의 사주 원국을 바탕으로 분석한 5대 핵심 운세입니다.</p>
+                    <div class="radar-chart-wrapper">
+                        <!-- SVG Radar Chart will be injected here -->
+                        <svg id="radar-chart" viewBox="0 0 200 200" class="radar-svg"></svg>
                     </div>
                 </div>
             </div>

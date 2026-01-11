@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신비한 타로 - 운명 연구소</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">운명 연구소 🔮</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-item">사주 분석</a>
+            <a href="tarot.html" class="nav-item active">신비한 타로</a>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>🌙 신비한 타로 (Mystic Tarot)</h1>
+            <p class="description">마음을 비우고 당신의 고민을 생각하며<br>끌리는 카드를 한 장 선택하세요.</p>
+        </header>
+
+        <div class="tarot-board" id="tarot-board">
+            <!-- Cards will be generated here -->
+        </div>
+
+        <div id="tarot-result" class="card result-card hidden">
+            <div class="seal-mark">運命</div>
+            <h2 id="card-name" class="result-title"></h2>
+            <div class="tarot-display">
+                <div class="selected-card-view" id="selected-card-view"></div>
+            </div>
+            <div class="card analysis-card">
+                <h3>📜 카드의 메시지</h3>
+                <p id="card-meaning"></p>
+            </div>
+            <div class="card analysis-card">
+                <h3>💡 조언 (Advice)</h3>
+                <p id="card-advice"></p>
+            </div>
+            <button onclick="location.reload()" class="retry-btn">다른 질문으로 다시 뽑기</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 운명 연구소. 재미로 보는 AI 타로입니다.</p>
+    </footer>
+
+    <script src="tarot.js"></script>
+    <script>
+        // Simple Theme Toggle for Tarot Page
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            themeToggle.innerText = savedTheme === 'light' ? '☀️' : '🌙';
+        }
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.innerText = newTheme === 'light' ? '☀️' : '🌙';
+        });
+    </script>
+</body>
+</html>
