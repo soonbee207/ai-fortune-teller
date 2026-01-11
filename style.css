@@ -787,7 +787,7 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 .card-front {
-    background-color: #f0e6d2;
+    background-color: #f0e6d2; /* Default card stock color */
     color: #333;
     transform: rotateY(180deg);
     display: flex;
@@ -796,11 +796,15 @@ input[type="radio"], input[type="checkbox"] {
     font-family: var(--font-serif);
     font-weight: bold;
     border: 2px solid var(--primary);
+    /* Make sure background image covers correctly */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .selected-card-view {
-    width: 150px;
-    height: 250px;
+    width: 200px; /* Larger view */
+    height: 340px;
     margin: 0 auto 2rem;
     background: #f0e6d2;
     color: #333;
@@ -813,6 +817,10 @@ input[type="radio"], input[type="checkbox"] {
     font-weight: bold;
     font-family: serif;
     box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    /* Make sure background image covers correctly */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hidden {
@@ -839,4 +847,6 @@ input[type="radio"], input[type="checkbox"] {
     .header h1 { font-size: 1.6rem; }
     .bar-chart { height: 100px; gap: 5px; }
     .tarot-board { grid-template-columns: repeat(6, 1fr); }
+    /* Mobile tarot adjustments */
+    .tarot-card { width: 45px; height: 75px; }
 }
