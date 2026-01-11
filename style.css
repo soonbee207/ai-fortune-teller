@@ -1,896 +1,231 @@
 :root {
-    --bg-color: #f8f9fa;
-    --text-color: #333;
-    --container-bg: #fff;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --btn-bg: #6c5ce7;
-    --btn-hover: #5b4cc4;
-    --number-bg: #eee;
-    --number-text: #333;
+    --bg-color: #1a1a2e;
+    --card-bg: #16213e;
+    --primary: #e94560;
+    --accent: #fcdab7; /* Gold/skin tone */
+    --text-main: #ffffff;
+    --text-muted: #a0a0a0;
+    --btn-bg: #e94560;
+    --btn-hover: #c1334b;
+    --border: #2a2a4e;
 }
 
-.dark-mode {
-    --bg-color: #1a1a1a;
-    --text-color: #f0f0f0;
-    --container-bg: #2d2d2d;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    --btn-bg: #8e44ad;
-    --btn-hover: #9b59b6;
-    --number-bg: #444;
-    --number-text: #fff;
+[data-theme="light"] {
+    --bg-color: #f5f5f5;
+    --card-bg: #ffffff;
+    --primary: #d63447;
+    --accent: #333333;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --btn-bg: #d63447;
+    --btn-hover: #b52b3b;
+    --border: #dddddd;
 }
 
-/* Navbar Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+    line-height: 1.6;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
-    background-color: var(--container-bg);
-    box-shadow: var(--shadow);
-    margin-bottom: 30px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    padding: 1rem 2rem;
+    background-color: var(--card-bg);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
 .nav-brand {
     font-size: 1.5rem;
     font-weight: bold;
-    color: var(--text-color);
+    color: var(--primary);
 }
 
-.nav-links {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: 500;
-    transition: color 0.3s;
-}
-
-.nav-links a:hover {
-    color: var(--btn-bg);
-}
-
-/* Footer Styles */
-.footer {
-    margin-top: 50px;
-    padding: 30px;
-    text-align: center;
-    background-color: var(--container-bg);
-    color: var(--text-color);
-    font-size: 0.9rem;
-}
-
-.footer-links a {
-    color: var(--text-color);
-    text-decoration: none;
-    margin: 0 10px;
-    opacity: 0.7;
-}
-
-.footer-links a:hover {
-    opacity: 1;
-}
-
-/* Content & Layout Adjustments */
-body {
-    /* Reset existing margin/padding from replace if needed, mostly handled by defaults */
-    display: block; /* Changed from flex center to allow proper document flow with navbar/footer */
-}
-
-.container {
-    margin: 0 auto; /* Center the container */
-    /* existing styles... */
-}
-
-.text-content {
-    text-align: left;
-    margin-top: 40px;
-    padding: 20px;
-    background-color: rgba(0,0,0,0.02);
-    border-radius: 10px;
-    line-height: 1.6;
-}
-
-.text-content h2 {
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    color: var(--btn-bg);
-}
-
-.text-content p {
-    margin-bottom: 15px;
-    color: var(--text-color);
-    opacity: 0.9;
-}
-
-.text-left {
-    text-align: left !important;
-}
-
-/* Position toggle in navbar instead of absolute */
 .theme-toggle {
-    position: static;
-    border: none;
     background: none;
-    padding: 5px;
-    margin-left: 10px;
-}
-
-.theme-toggle:hover {
-    transform: scale(1.2);
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-main);
 }
 
 .container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
     text-align: center;
-    background-color: var(--container-bg);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    max-width: 500px;
-    width: 100%;
-    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
-h1 {
-    margin-bottom: 10px;
-    font-size: 2rem;
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
 }
 
 .description {
-    margin-bottom: 30px;
-    font-size: 1.1rem;
-    line-height: 1.5;
-    opacity: 0.8;
+    color: var(--text-muted);
 }
 
-.numbers-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
-    min-height: 50px; /* Prevent jump when empty */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: 1px solid var(--border);
 }
 
-.lotto-row {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
 }
 
-.number {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: var(--number-bg);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
+label {
+    display: block;
+    margin-bottom: 0.5rem;
     font-weight: bold;
-    color: var(--number-text);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: var(--accent);
 }
 
-/* Ball Colors */
-.ball-10 { background-color: #fbc400; color: #333; }
-.ball-20 { background-color: #69c8f2; color: #fff; }
-.ball-30 { background-color: #ff7272; color: #fff; }
-.ball-40 { background-color: #aaaaaa; color: #fff; }
-.ball-45 { background-color: #b0d840; color: #fff; }
+input[type="text"],
+input[type="date"],
+input[type="time"] {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-size: 1rem;
+}
 
-#generate-btn {
-    padding: 15px 30px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 50px;
+.radio-group {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.analyze-btn, .retry-btn {
+    width: 100%;
+    padding: 1rem;
     background-color: var(--btn-bg);
     color: white;
-    cursor: pointer;
-    transition: transform 0.1s, background-color 0.3s;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-}
-
-#generate-btn:hover {
-    background-color: var(--btn-hover);
-    transform: translateY(-2px);
-}
-
-#generate-btn:active {
-
-    transform: translateY(0);
-
-}
-
-
-
-.contact-section {
-
-    margin-top: 40px;
-
-    padding-top: 30px;
-
-    border-top: 1px solid var(--number-bg);
-
-    text-align: left;
-
-}
-
-
-
-.contact-section h3 {
-
-    margin-bottom: 15px;
-
-    font-size: 1.2rem;
-
-    text-align: center;
-
-}
-
-
-
-.contact-form {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 10px;
-
-}
-
-
-
-.contact-form input,
-
-.contact-form textarea {
-
-    padding: 12px;
-
-    border-radius: 8px;
-
-    border: 1px solid var(--number-bg);
-
-    background-color: var(--bg-color);
-
-    color: var(--text-color);
-
-    font-family: inherit;
-
-    font-size: 0.9rem;
-
-}
-
-
-
-.contact-form textarea {
-
-    height: 100px;
-
-    resize: none;
-
-}
-
-
-
-.contact-form button {
-
-    padding: 10px;
-
-    border-radius: 8px;
-
     border: none;
-
-    background-color: var(--text-color);
-
-    color: var(--bg-color);
-
+    border-radius: 8px;
+    font-size: 1.1rem;
     font-weight: bold;
-
     cursor: pointer;
-
-    transition: opacity 0.2s;
-
-}
-
-
-
-.contact-form button:hover {
-
-
-
-    opacity: 0.8;
-
-
-
-}
-
-
-
-
-
-
-
-/* Image Upload Styles */
-
-
-
-.file-upload-input {
-
-
-
-    position: absolute;
-
-
-
-    margin: 0;
-
-
-
-    padding: 0;
-
-
-
-    width: 100%;
-
-
-
-    height: 100%;
-
-
-
-    outline: none;
-
-
-
-    opacity: 0;
-
-
-
-    cursor: pointer;
-
-
-
-}
-
-
-
-
-
-
-
-.image-upload-wrap {
-
-
-
-    margin-top: 20px;
-
-
-
-    border: 4px dashed var(--number-bg);
-
-
-
-    position: relative;
-
-
-
-    border-radius: 10px;
-
-
-
     transition: background-color 0.2s;
-
-
-
 }
 
-
-
-
-
-
-
-.image-dropping,
-
-
-
-.image-upload-wrap:hover {
-
-
-
-    background-color: var(--number-bg);
-
-
-
-    opacity: 0.6;
-
-
-
+.analyze-btn:hover, .retry-btn:hover {
+    background-color: var(--btn-hover);
 }
 
-
-
-
-
-
-
-.drag-text {
-
-
-
-    text-align: center;
-
-
-
-    padding: 40px;
-
-
-
+.hint {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
-
-
-
-
-
-
-.drag-text h3 {
-
-
-
-    font-weight: 100;
-
-
-
-    color: var(--text-color);
-
-
-
-    margin: 0;
-
-
-
-}
-
-
-
-
-
-
-
-.file-upload-content {
-
-
-
+.hidden {
     display: none;
-
-
-
-    text-align: center;
-
-
-
-    margin-top: 20px;
-
-
-
 }
 
-
-
-
-
-
-
-.file-upload-image {
-
-
-
-    max-height: 200px;
-
-
-
-    max-width: 200px;
-
-
-
-    margin: auto;
-
-
-
-    padding: 10px;
-
-
-
-    border-radius: 10px;
-
-
-
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
-
-
+.loading {
+    margin: 2rem 0;
 }
-
-
-
-
-
-
-
-.remove-image {
-
-
-
-    width: 200px;
-
-
-
-    margin: 20px auto;
-
-
-
-    color: #fff;
-
-
-
-    background: #cd4535;
-
-
-
-    border: none;
-
-
-
-    padding: 10px;
-
-
-
-    border-radius: 4px;
-
-
-
-    cursor: pointer;
-
-
-
-    font-weight: bold;
-
-
-
-    transition: all 0.2s ease;
-
-
-
-    outline: none;
-
-
-
-}
-
-
-
-
-
-
-
-.remove-image:hover {
-
-
-
-    background: #c13b2a;
-
-
-
-    color: #ffffff;
-
-
-
-    transition: all 0.2s ease;
-
-
-
-    cursor: pointer;
-
-
-
-}
-
-
-
-
-
-
-
-.remove-image:active {
-
-
-
-    border: 0;
-
-
-
-    transition: all 0.2s ease;
-
-
-
-}
-
-
-
-
-
-
-
-/* Result Styles */
-
-
-
-.result-message {
-
-
-
-    font-size: 1.5rem;
-
-
-
-    font-weight: bold;
-
-
-
-    margin: 20px 0;
-
-
-
-    color: var(--text-color);
-
-
-
-}
-
-
-
-
-
-
-
-.bar-container {
-
-
-
-    display: flex;
-
-
-
-    align-items: center;
-
-
-
-    margin-bottom: 10px;
-
-
-
-    width: 100%;
-
-
-
-}
-
-
-
-
-
-
-
-.label-text {
-
-
-
-    width: 60px;
-
-
-
-    text-align: right;
-
-
-
-    margin-right: 10px;
-
-
-
-    font-weight: bold;
-
-
-
-}
-
-
-
-
-
-
-
-.bar-wrap {
-
-
-
-    flex-grow: 1;
-
-
-
-    background-color: var(--number-bg);
-
-
-
-    border-radius: 10px;
-
-
-
-    height: 20px;
-
-
-
-    overflow: hidden;
-
-
-
-    margin-right: 10px;
-
-
-
-}
-
-
-
-
-
-
-
-.bar {
-
-
-
-    height: 100%;
-
-
-
-    border-radius: 10px;
-
-
-
-    transition: width 0.5s ease;
-
-
-
-}
-
-
-
-
-
-
-
-.dog-bar { background-color: #f1c40f; }
-
-
-
-.cat-bar { background-color: #3498db; }
-
-
-
-
-
-
-
-.percent-text {
-
-
-
-    width: 40px;
-
-
-
-    text-align: left;
-
-
-
-    font-size: 0.9rem;
-
-
-
-}
-
-
-
-
-
-
-
-#loading {
-
-
-
-    display: none;
-
-
-
-    margin: 20px 0;
-
-
-
-}
-
-
-
-
-
-
 
 .spinner {
-
-
-
-    border: 4px solid rgba(0, 0, 0, 0.1);
-
-
-
-    width: 36px;
-
-
-
-    height: 36px;
-
-
-
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-left-color: var(--primary);
     border-radius: 50%;
-
-
-
-    border-left-color: var(--btn-bg);
-
-
-
-    animation: spin 1s ease infinite;
-
-
-
-    margin: 0 auto 10px;
-
-
-
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
 }
-
-
-
-
-
-
 
 @keyframes spin {
-
-
-
-    0% { transform: rotate(0deg); }
-
-
-
-    100% { transform: rotate(360deg); }
-
-
-
+    to { transform: rotate(360deg); }
 }
 
+.saju-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
 
+.saju-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+}
 
+.saju-item .label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+}
 
+.saju-item .value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.analysis-card h3 {
+    margin-bottom: 1rem;
+    color: var(--primary);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.luck-list {
+    list-style: none;
+    text-align: left;
+}
+
+.luck-list li {
+    margin-bottom: 0.8rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.luck-list li::before {
+    content: '🌸';
+    position: absolute;
+    left: 0;
+}
+
+.footer {
+    margin-top: 3rem;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
