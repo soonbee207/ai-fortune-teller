@@ -224,15 +224,6 @@ function displayResults(name, pillars, stats, gender) {
     renderCharts(stats);
     renderRadarChart(pillars.day.elementStem, stats.counts);
 
-    // NEW: Past Life & Color Therapy
-    const pastLife = getPastLife(pillars.year.branchIndex, pillars.day.stemIndex);
-    safeSetText('past-life-icon', pastLife.icon);
-    safeSetText('past-life-title', pastLife.title);
-    safeSetText('past-life-desc', pastLife.desc);
-
-    const colors = getColorTherapy(stats.counts);
-    renderColorPalette(colors);
-
     // 4. Generate Detailed Interpretation
     const interpretations = getInterpretations(pillars.day.elementStem, stats.dominant, stats.counts);
     
@@ -441,84 +432,7 @@ function renderCharts(stats) {
     }
 }
 
-// NEW: Past Life & Color Therapy
-function getPastLife(yearBranch, dayStem) {
-    // Generate fun past life based on Year Animal and Day Stem
-    const backgrounds = [
-        "조선시대 왕실의 비법을 연구하던", "깊은 산속에서 도를 닦던", 
-        "실크로드를 누비며 무역을 하던", "전쟁터를 호령하던 명장",
-        "아름다운 시와 그림을 남긴", "백성을 구휼하던 의로운"
-    ];
-    const roles = [
-        "천재적인 학자", "신비로운 연금술사", "거상(巨商)", 
-        "장군", "예술가", "의원", "책사"
-    ];
-    const icons = ["📜", "⚗️", "💰", "⚔️", "🎨", "💊", "🧭"];
-
-    const idx = (yearBranch + dayStem) % roles.length;
-    
-    return {
-        icon: icons[idx],
-        title: `${backgrounds[idx % backgrounds.length]} ${roles[idx]}`,
-        desc: "전생의 당신은 뛰어난 능력으로 많은 이들에게 영감을 주었습니다. 그때 쌓은 공덕과 지혜가 현생의 당신에게 잠재된 재능으로 남아있습니다."
-    };
-}
-
-function getColorTherapy(counts) {
-    const elements = ['wood', 'fire', 'earth', 'metal', 'water'];
-    const colors = {
-        wood: ['#4caf50', '#81c784', '#2e7d32'], // Green
-        fire: ['#e53935', '#ff8a65', '#c62828'], // Red
-        earth: ['#795548', '#a1887f', '#4e342e'], // Brown
-        metal: ['#bdbdbd', '#e0e0e0', '#757575'], // White/Grey
-        water: ['#2196f3', '#64b5f6', '#1565c0']  // Blue/Black
-    };
-    
-    // Find missing or weakest elements
-    let minCount = 99;
-    let weakest = [];
-    
-    elements.forEach(elm => {
-        if (counts[elm] < minCount) {
-            minCount = counts[elm];
-            weakest = [elm];
-        } else if (counts[elm] === minCount) {
-            weakest.push(elm);
-        }
-    });
-    
-    // Select colors from weakest elements
-    const palette = [];
-    weakest.forEach(elm => {
-        palette.push(...colors[elm]);
-    });
-    
-    return palette.slice(0, 4); // Return up to 4 colors
-}
-
-function renderColorPalette(colors) {
-    const container = document.getElementById('color-palette');
-    if (!container) return;
-    container.innerHTML = '';
-    
-    colors.forEach(color => {
-        const circle = document.createElement('div');
-        circle.className = 'color-circle';
-        circle.style.backgroundColor = color;
-        
-        // Tooltip or label
-        const code = document.createElement('span');
-        code.className = 'color-code';
-        code.innerText = color;
-        
-        const wrapper = document.createElement('div');
-        wrapper.className = 'color-wrapper';
-        wrapper.appendChild(circle);
-        wrapper.appendChild(code);
-        
-        container.appendChild(wrapper);
-    });
-}
+// NEW: Radar Chart Logic
 
 function getInterpretations(dayElement, dominant, counts) {
     const selfName = ELEMENT_NAMES_KO[dayElement];
