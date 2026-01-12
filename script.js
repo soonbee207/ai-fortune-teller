@@ -195,24 +195,30 @@ function calculateStats(pillars) {
 }
 
 function displayResults(name, pillars, stats, gender) {
+    // Helper for safe DOM updates
+    const safeSetText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = text;
+    };
+    const safeSetHTML = (id, html) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = html;
+    };
+
     // 1. Fill Pillars
     const setPillar = (id, p) => {
-        const el = document.getElementById(id);
-        if(el) el.innerText = p ? `${p.stem}${p.branch}` : '미정(未定)';
+        safeSetText(id, p ? `${p.stem}${p.branch}` : '미정(未定)');
     };
     setPillar('year-pillar', pillars.year);
     setPillar('month-pillar', pillars.month);
     setPillar('day-pillar', pillars.day);
     setPillar('time-pillar', pillars.time);
     
-    document.getElementById('result-name').innerText = `${name}님의 명조(命造)`;
+    safeSetText('result-name', `${name}님의 명조(命造)`);
 
     // 2. Key Destiny Quote
     const quote = getDestinyQuote(pillars.day.elementStem, stats.dominant);
-    const quoteEl = document.getElementById('key-destiny-quote');
-    if (quoteEl) {
-        quoteEl.innerText = `“${quote}”`;
-    }
+    safeSetText('key-destiny-quote', `“${quote}”`);
 
     // 3. Render Charts (Bar & Radar)
     renderCharts(stats);
@@ -220,9 +226,9 @@ function displayResults(name, pillars, stats, gender) {
 
     // NEW: Past Life & Color Therapy
     const pastLife = getPastLife(pillars.year.branchIndex, pillars.day.stemIndex);
-    document.getElementById('past-life-icon').innerText = pastLife.icon;
-    document.getElementById('past-life-title').innerText = pastLife.title;
-    document.getElementById('past-life-desc').innerText = pastLife.desc;
+    safeSetText('past-life-icon', pastLife.icon);
+    safeSetText('past-life-title', pastLife.title);
+    safeSetText('past-life-desc', pastLife.desc);
 
     const colors = getColorTherapy(stats.counts);
     renderColorPalette(colors);
@@ -230,21 +236,21 @@ function displayResults(name, pillars, stats, gender) {
     // 4. Generate Detailed Interpretation
     const interpretations = getInterpretations(pillars.day.elementStem, stats.dominant, stats.counts);
     
-    document.getElementById('summary-text').innerHTML = interpretations.summary;
-    document.getElementById('personality-text').innerHTML = interpretations.personality;
-    document.getElementById('love-text').innerHTML = interpretations.love;
-    document.getElementById('wealth-text').innerHTML = interpretations.wealth;
-    document.getElementById('caution-text').innerHTML = interpretations.caution;
+    safeSetHTML('summary-text', interpretations.summary);
+    safeSetHTML('personality-text', interpretations.personality);
+    safeSetHTML('love-text', interpretations.love);
+    safeSetHTML('wealth-text', interpretations.wealth);
+    safeSetHTML('caution-text', interpretations.caution);
 
     // 5. Compatibility
     const compat = getCompatibility(pillars.day.elementStem, stats.dominant);
-    document.getElementById('good-element').innerText = compat.good.name;
-    document.getElementById('good-reason').innerHTML = compat.good.reason;
-    document.getElementById('bad-element').innerText = compat.bad.name;
-    document.getElementById('bad-reason').innerHTML = compat.bad.reason;
+    safeSetText('good-element', compat.good.name);
+    safeSetHTML('good-reason', compat.good.reason);
+    safeSetText('bad-element', compat.bad.name);
+    safeSetHTML('bad-reason', compat.bad.reason);
 
     // 6. Time-based & Lucky Items
-    document.getElementById('today-luck').innerText = getDailyLuck(pillars.day.stemIndex);
+    safeSetText('today-luck', getDailyLuck(pillars.day.stemIndex));
     
     const yearlyContainer = document.getElementById('yearly-luck-container');
     if (yearlyContainer) {
@@ -261,12 +267,12 @@ function displayResults(name, pillars, stats, gender) {
     }
 
     const luckyData = getLuckyData(pillars.day.stemIndex);
-    document.getElementById('lucky-numbers').innerText = luckyData.numbers;
-    document.getElementById('lucky-color').innerText = luckyData.color;
+    safeSetText('lucky-numbers', luckyData.numbers);
+    safeSetText('lucky-color', luckyData.color);
 
     // Add Date
     const today = new Date();
-    document.getElementById('report-date').innerText = `작성일: ${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}`;
+    safeSetText('report-date', `작성일: ${today.getFullYear()}. ${today.getMonth()+1}. ${today.getDate()}`);
 }
 
 // NEW: Radar Chart Logic
