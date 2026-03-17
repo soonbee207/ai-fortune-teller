@@ -68,6 +68,12 @@ This project was built to explore:
 
 ---
 
+## 🌐 Live Demo
+
+https://ai-fortune-teller-one.vercel.app
+
+---
+
 ## Author
 
 **Soonbee Hwang**  
